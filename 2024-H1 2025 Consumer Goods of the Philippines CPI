@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Philippine Economy Data Portfolio</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: auto;
+      padding: 40px;
+      background-color: #f9f9f9;
+      line-height: 1.6;
+    }
+    h1, h2 {
+      color: #333;
+    }
+    img {
+      width: 100%;
+      max-width: 700px;
+      margin: 20px 0;
+      border: 1px solid #ccc;
+    }
+    .chart-section {
+      margin-bottom: 50px;
+    }
+    ul {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>My Data Science Portfolio</h1>
+  <p>This portfolio showcases visualizations and insights from Philippine inflation data (2010–2025).</p>
+
+  <p>
+    The Philippine Statistics Authority (PSA) has released Consumer Price Index (CPI) of goods in the Philippines with respect to 2018 prices.
+    The following are the complete list of goods in the PSA report:
+  </p>
+
+  <ul>
+    <li>Food and Non-Alcoholic Beverages</li>
+    <li>Alcoholic Beverages and Tobacco</li>
+    <li>Clothing and Footwear</li>
+    <li>Housing, Water, Electricity, Gas and Other Fuels</li>
+    <li>Furnishings, Household Equipment and Routine Household Maintenance</li>
+    <li>Health</li>
+    <li>Transport</li>
+    <li>Information and Communication</li>
+    <li>Recreation, Sport and Culture</li>
+    <li>Education Services</li>
+    <li>Restaurants and Accommodation Services</li>
+    <li>Financial Services</li>
+    <li>Personal Care, and Miscellaneous Goods and Services</li>
+  </ul>
+
+  <p>
+    So that being said, we can take a look on the PCA of consumer goods as seen on the chart below:
+  </p>
+
+  <div class="chart-section">
+    <h2>1. PCA of Consumer Price Index (Untrimmed)</h2>
+    <img src="charts/1_PCA_of_CPI_untrimmed.png" alt="PCA Chart - Untrimmed">
+  </div>
+
+</body>
+</html>
