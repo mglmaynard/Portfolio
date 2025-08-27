@@ -59,6 +59,15 @@
   <p>
     CPI is a metric used to reveal inflation and cost of living. An increase in CPI is indicative to an increase in price relative to a certain period of time. Last June 2025, PSA reports that the CPI of common goods rose to 127% relative to 2018 prices. In this page, we will discuss which goods are mostly affected and which ones are not to identify which ones are more prone to inflation and those that are more resistant to it. We will be using Python as a tool help us cluster our data and have a meaningful analysis.
   </p>
+
+  <p>
+  Before we begin clustering, let's standardize our data and do Principal Component Analysis (PCA) to simplify our analysis. The code displayed below is a python code which we used to do the standardization and PCA.  
+  </p>
+  
+  <div class="chart-section">
+    <h2>1.2. Python Code on Standardization and PCA Generation</h2>
+    <img src="charts/2_Standardizing_and_PCA.png" alt="PCA Chart - Untrimmed">
+  </div>
   
   <p>
     So that being said, we let's take a look on the PCA of consumer goods as seen on the chart below:
@@ -70,13 +79,21 @@
   </div>
 
   <p>
-    Based on the result of the PCA,
+    Our PCA chart has two (2) dimensions, with the x-axis being the PC1 and y-axis being the PC2. To further disect the PCA, we take a look on the figure below to see the the scores of each PCA, namely PC1 and PC2.
+  </p>
+
+  <div class="chart-section">
+    <h2>1.2. PC1 and PC2 Scores</h2>
+    <img src="charts/9_PC1_and_PC2_untrimmed.png" alt="PCA Chart - Untrimmed">
+  </div>
+
+  <p>
+    Notice that PC1 has far higher scores than PC2. This means that PC1 is more corelated to CPI values than PC2. With that, we focus on the x-axis component of figure 1.1.
   </p>
   
-  <div class="chart-section">
-    <h2>1.2. Python Code on Standardization and PCA Generation</h2>
-    <img src="charts/2_Standardizing_and_PCA.png" alt="PCA Chart - Untrimmed">
-  </div>
+  <p>
+    Based on the result of the PCA,
+  </p>
 
   <div class="chart-section">
     <h2>1.3. Python Code for Determining K via Silhouette Score</h2>
