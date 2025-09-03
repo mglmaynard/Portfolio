@@ -88,23 +88,31 @@
   </div>
 
   <p>
-    Notice that PC1 has far higher scores than PC2, with 99.71% vs that 0.21% of PC2. This means that PC1 is more corelated to CPI values than PC2. With that, we focus on the x-axis component of figure 1.1.
+    Notice that PC1 already explains 99.71% of the variance vs that of 0.21% from PC2. This means that PC1 is more corelated to CPI values than PC2. With that, we focus on the x-axis component of figure 1.1.
   </p>
   
   <p>
-    Based on the result of the PCA, "Alcoholic Beverages and Tobacco" yielded the highest score, while "Information and Communication" had the lowest score. Could it be the case that "Alcoholic Beverages and Tobacco" is more susceptible to inflation, while "Information and Communication" is more resilient? For simplicity, the figure below shows the top 5 highest PC1 and the top 5 lowest PCA.
+    Based on the result of the PCA, "Alcoholic Beverages and Tobacco" yielded the highest score, while "Information and Communication" had the lowest score. Could it be the case that "Alcoholic Beverages and Tobacco" is more susceptible to inflation, while "Information and Communication" is more resilient? For simplicity, the figure below shows the top 5 highest PC1 and the top 5 lowest PC1.
   </p>
 
    <div class="chart-section">
     <h2>1.4. Top 5 Highest and Top 5 Lowest PC1</h2>
     <img src="charts/10_Top_PC1_and_PC2_untrimmed.png" alt="PCA Chart - Untrimmed">
   </div>
+
+  <p>
+    From the Top 5 highest PC1, "Alcoholic Beverages and Tobacco" stands out the most as it does not only record the highest PC1, but its PC1 score is 3x more than the second highest. While, "Information and Communication" have lowest PC1 scores across all commodities. To further visualize the gaps between commodities and their relationship to CPI, we'll be using K-Means Clustering. But assigning the value of K would be vital. So we'll be gathering the respective Silhouette Scores of each value of K from 1 to 10. We'll be using the Python code below to plot the result.
+  </p>
   
   <div class="chart-section">
     <h2>1.5. Python Code for Determining K via Silhouette Score</h2>
     <img src="charts/3_Silhouette_Score_trimmed_py_code.png" alt="PCA Chart - Untrimmed">
   </div>
 
+  <p>
+    After using the python code, we end up with the chart below. It is evident that k=2 had the highest Silhouette Score, meaning we'll be using only 2 clusters for our clustering.
+  </p>
+  
     <div class="chart-section">
     <h2>1.6. Result of Silhouette Score</h2>
     <img src="charts/6_Silhouette_Score_untrimmed.png" alt="PCA Chart - Untrimmed">
