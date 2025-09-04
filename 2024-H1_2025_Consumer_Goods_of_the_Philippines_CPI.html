@@ -46,7 +46,7 @@
 
   <h1>2024 - H1 2025 Analysis of Consumer Price Index (CPI) of the Philippines</h1>
   
-  <h2>Overview</h2>
+  <h2>Context and Objective</h2>
   
   <p>This portfolio showcases visualizations and insights from Philippine inflation data (2024–H1 2025).</p>
   
@@ -75,7 +75,7 @@
     CPI is a metric used to reveal inflation and cost of living. An increase in CPI is indicative to an increase in price relative to a certain period of time. Last June 2025, PSA reports that the CPI of common goods rose to 127% relative to 2018 prices. In this page, we will discuss which goods are mostly affected and which ones are not to identify which ones are more prone to inflation and those that are more resistant to it. We will be using Python as a tool help us cluster our data and have a meaningful analysis.
   </p>
 
-  <h2>Initial Analysis</h2>
+  <h2>Exploratory Data Analysis (EDA)</h2>
     
   <p>
   Before we begin clustering, let's standardize our data and do Principal Component Analysis (PCA) to simplify our analysis. The code displayed below is a python code which we used to do the standardization and PCA.  
@@ -148,7 +148,7 @@
     With that, we end up with a trimmed PCA chart as shown below. This PCA chart excludes ABT from the data set as it is considered an outlier and would not help in identifying actual clusters of commodity goods.
   </p>
 
-  <h2>Final Analysis</h2>
+  <h2>Key Insights and Refined Clustering</h2>
   <figure class="chart-section">
     <img src="charts/5_PCA_of_CPI_trimmed.png" alt="PCA Chart - Untrimmed">
     <figcaption>2.1. PCA of Consumer Price Index (Trimmed)</figcaption>
