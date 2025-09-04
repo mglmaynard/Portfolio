@@ -118,11 +118,19 @@
     <img src="charts/6_Silhouette_Score_untrimmed.png" alt="PCA Chart - Untrimmed">
   </div>
 
+  <p>
+    However, just by looking at the clustering figure below, it is easy to see that one outlier belongs to no group. Going back to figure 1.2, we know that the outlier is "Alcoholic Beverages and Tobacco". This comes as no surprise since it recorded the highest PC1 score earlier, even exceeding more than 3x the second in terms of PC1 score. Furthermore, the Philippine Government has a law, called "Sin Tax Reform Law of 2012", where "Alcoholic Beverages and Tobacco" (ABT) is imposed more taxes compared to other commodity goods. Hence, price for ABT is more driven by policy regulation rather than inflation, resulting to sharp increase in price. Hence, it would be best to remove ABT from the data set in order to avoid skewing our results and analysis.
+  </p>
+
     <div class="chart-section">
     <h2>1.7. K-Means Clustering</h2>
     <img src="charts/4_KMeans_untrimmed.png" alt="PCA Chart - Untrimmed">
   </div>
 
+  <p>
+    With that, we end up with a trimmed PCA chart as shown below. This PCA chart excludes ABT from the data set as it is considered an outlier and would not help in identifying actual clusters of commodity goods.
+  </p>
+    
   <div class="chart-section">
     <h2>2.1. PCA of Consumer Price Index (Trimmed)</h2>
     <img src="charts/5_PCA_of_CPI_trimmed.png" alt="PCA Chart - Untrimmed">
