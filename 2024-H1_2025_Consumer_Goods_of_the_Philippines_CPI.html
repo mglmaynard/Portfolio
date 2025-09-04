@@ -144,11 +144,16 @@
     <figcaption>1.7. K-Means Clustering</figcaption>
   </figure>
 
+  <h2>Key Insights and Refined Clustering</h2>
+  
   <p>
     With that, we end up with a trimmed PCA chart as shown below. This PCA chart excludes ABT from the data set as it is considered an outlier and would not help in identifying actual clusters of commodity goods.
   </p>
-
-  <h2>Key Insights and Refined Clustering</h2>
+  
+  <p>
+    After removing ABT from the chart, the range of PC1 and PC2 are now tighter compared to that of figure 1.2. Furthermore, the explained variance calculated for the new trimmed data is 99.12% and 0.63% for PC1 and PC2, respectively. This indicates that the initial result of PC1 holding more value over PC2 still holds true for our trimmed data.
+  </p>
+  
   <figure class="chart-section">
     <img src="charts/5_PCA_of_CPI_trimmed.png" alt="PCA Chart - Untrimmed">
     <figcaption>2.1. PCA of Consumer Price Index (Trimmed)</figcaption>
