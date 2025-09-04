@@ -33,9 +33,10 @@
 <body>
 
   <h1>2024 - H1 2025 Analysis of Consumer Price Index (CPI) of the Philippines</h1>
-  <p>This portfolio showcases visualizations and insights from Philippine inflation data (2024–H1 2025).</p>
-
+  
   <h2>Overview</h2>
+  
+  <p>This portfolio showcases visualizations and insights from Philippine inflation data (2024–H1 2025).</p>
   
   <p>
     The Philippine Statistics Authority (PSA) has released Consumer Price Index (CPI) of goods in the Philippines with respect to 2018 prices.
@@ -62,12 +63,13 @@
     CPI is a metric used to reveal inflation and cost of living. An increase in CPI is indicative to an increase in price relative to a certain period of time. Last June 2025, PSA reports that the CPI of common goods rose to 127% relative to 2018 prices. In this page, we will discuss which goods are mostly affected and which ones are not to identify which ones are more prone to inflation and those that are more resistant to it. We will be using Python as a tool help us cluster our data and have a meaningful analysis.
   </p>
 
+  <h2>Initial Analysis</h2>
+    
   <p>
   Before we begin clustering, let's standardize our data and do Principal Component Analysis (PCA) to simplify our analysis. The code displayed below is a python code which we used to do the standardization and PCA.  
   </p>
   
   <div class="chart-section">
-    <h2>1.1. Python Code on Standardization and PCA Generation</h2>
     <img src="charts/2_Standardizing_and_PCA.png" alt="PCA Chart - Untrimmed">
     <figcaption>1.1. Python Code on Standardization and PCA Generation</figcaption>
   </div>
@@ -77,7 +79,6 @@
   </p>
 
   <div class="chart-section">
-    <h2>1.2. PCA of Consumer Price Index</h2>
     <img src="charts/1_PCA_of_CPI_untrimmed.png" alt="PCA Chart - Untrimmed">
     <figcaption>1.2. PCA of Consumer Price Index</figcaption>
   </div>
@@ -87,7 +88,6 @@
   </p>
 
   <div class="chart-section">
-    <h2>1.3. PC1 and PC2 Scores</h2>
     <img src="charts/9_PC1_and_PC2_untrimmed.png" alt="PCA Chart - Untrimmed">
     <figcaption>1.3. PC1 and PC2 Scores</figcaption>
   </div>
@@ -101,7 +101,6 @@
   </p>
 
    <div class="chart-section">
-    <h2>1.4. Top 5 Highest and Top 5 Lowest PC1</h2>
     <img src="charts/10_Top_PC1_and_PC2_untrimmed.png" alt="PCA Chart - Untrimmed">
     <figcaption>1.4. Top 5 Highest and Top 5 Lowest PC1</figcaption>
   </div>
@@ -111,7 +110,6 @@
   </p>
   
   <div class="chart-section">
-    <h2>1.5. Python Code for Determining K via Silhouette Score</h2>
     <img src="charts/3_Silhouette_Score_trimmed_py_code.png" alt="PCA Chart - Untrimmed">
     <figcaption>1.5. Python Code for Determining K via Silhouette Score</figcaption>
   </div>
@@ -121,7 +119,6 @@
   </p>
   
     <div class="chart-section">
-    <h2>1.6. Result of Silhouette Score</h2>
     <img src="charts/6_Silhouette_Score_untrimmed.png" alt="PCA Chart - Untrimmed">
     <figcaption>1.6. Result of Silhouette Score</figcaption>
   </div>
@@ -131,7 +128,6 @@
   </p>
 
     <div class="chart-section">
-    <h2>1.7. K-Means Clustering</h2>
     <img src="charts/4_KMeans_untrimmed.png" alt="PCA Chart - Untrimmed">
     <figcaption>1.7. K-Means Clustering</figcaption>
   </div>
@@ -139,21 +135,19 @@
   <p>
     With that, we end up with a trimmed PCA chart as shown below. This PCA chart excludes ABT from the data set as it is considered an outlier and would not help in identifying actual clusters of commodity goods.
   </p>
-    
+
+  <h2>Final Analysis</h2>
   <div class="chart-section">
-    <h2>2.1. PCA of Consumer Price Index (Trimmed)</h2>
     <img src="charts/5_PCA_of_CPI_trimmed.png" alt="PCA Chart - Untrimmed">
     <figcaption>2.1. PCA of Consumer Price Index (Trimmed)</figcaption>
   </div>
 
   <div class="chart-section">
-    <h2>2.2. Updated Result of Silhouette Score based on Trimmed CPI</h2>
     <img src="charts/7_Silhouette_Score_trimmed.png" alt="PCA Chart - Untrimmed">
     <figcaption>2.2. Updated Result of Silhouette Score based on Trimmed CPI</figcaption>
   </div>
 
   <div class="chart-section">
-    <h2>2.3. K-Means Cluster of Trimmed CPI</h2>
     <img src="charts/8_KMeans_trimmed.png" alt="PCA Chart - Untrimmed">
     <figcaption>2.3. K-Means Cluster of Trimmed CPI</figcaption>
   </div>
