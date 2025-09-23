@@ -147,14 +147,11 @@
   Our analysis used <em>weighted samples</em> created by replicating rental price midpoints according to the number of households in each price bracket. Given the large sample size (over a million data points per region), the tests were sensitive to even small deviations from normality.
 </p>
 
-<p>
-  <strong>The results were as follows:</strong><br>
-  Both the Shapiro-Wilk and Kolmogorov-Smirnov tests yielded very low p-values (<em>p &lt; 0.001</em>) for NCR and Region IV-A.
-</p>
-
-<p>
-  A low p-value indicates strong evidence to reject the assumption of normality in the rental price data.
-</p>
+<p><strong>The results were as follows:</strong></p>
+<ul>
+  <li>Both the Shapiro-Wilk and Kolmogorov-Smirnov tests yielded very low p-values (<em>p &lt; 0.001</em>) for NCR and Region IV-A.</li>
+  <li>A low p-value indicates strong evidence to reject the assumption of normality in the rental price data.</li>
+</ul>
 
 <p>
   This outcome suggests that while the data may appear somewhat bell-shaped visually, it does not perfectly conform to a normal distribution. This deviation is common in real-world data, especially when prices are grouped into brackets and influenced by market factors.
@@ -163,6 +160,13 @@
 <p>
   Recognizing these limitations, we next use a <strong>Kernel Density Estimate (KDE)</strong> to visualize the rental price distribution more flexibly, without assuming any particular distribution form.
 </p>
+
+  
+
+<figure class="chart-section">
+  <img src="KDE_charts/5_KDE.png" alt="Price Distribution of Housing Rent on NCR and Region IV-A">
+  <figcaption>1.7. Kernel Density Estimate (KDE) on Rental Prices</figcaption>
+</figure>
 
   
 </body>
