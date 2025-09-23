@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rental Price Distribution Analysis in NCR and Region IV-A via Kernel Density Estimation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: auto;
+      padding: 40px;
+      background-color: #f9f9f9;
+      line-height: 1.6;
+    }
+    h1, h2 {
+      color: #333;
+    }
+    img {
+      width: 100%;
+      max-width: 700px;
+      margin: 20px 0;
+      border: 1px solid #ccc;
+    }
+    .chart-section {
+      margin-bottom: 50px;
+    }
+    ul {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    figure {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    figcaption {
+      font-style: italic;
+      font-size: 14px;
+      color: #555;
+      margin-top: 8px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <h1>Rental Price Distribution Analysis in NCR and Region IV-A via Kernel Density Estimation</h1>
+  
+  <h2>Introduction</h2>
+  
+  <p>This portfolio showcases visualizations and insights from Philippine inflation data (2024–H1 2025).</p>
+  
+  <p>
+    The Philippine Statistics Authority (PSA) has released Consumer Price Index (CPI) of goods in the Philippines with respect to 2018 prices.
+    The following are the complete list of goods in the PSA report:
+  </p>
+
+  <ul>
+    <li>Food and Non-Alcoholic Beverages</li>
+    <li>Alcoholic Beverages and Tobacco</li>
+    <li>Clothing and Footwear</li>
+    <li>Housing, Water, Electricity, Gas and Other Fuels</li>
+    <li>Furnishings, Household Equipment and Routine Household Maintenance</li>
+    <li>Health</li>
+    <li>Transport</li>
+    <li>Information and Communication</li>
+    <li>Recreation, Sport and Culture</li>
+    <li>Education Services</li>
+    <li>Restaurants and Accommodation Services</li>
+    <li>Financial Services</li>
+    <li>Personal Care, and Miscellaneous Goods and Services</li>
+  </ul>
+
+  <p>
+    CPI is a metric used to reveal inflation and cost of living. An increase in CPI is indicative to an increase in price relative to a certain period of time. Last June 2025, PSA reports that the CPI of common goods rose to 127% relative to 2018 prices. In this page, we will discuss which goods are mostly affected and which ones are not to identify which ones are more prone to inflation and those that are more resistant to it. We will be using Python as a tool help us cluster our data and have a meaningful analysis.
+  </p>
+
+  <h2>Exploratory Data Analysis (EDA)</h2>
+    
+  <p>
+  Before we begin clustering, let's standardize our data and do Principal Component Analysis (PCA) to simplify our analysis. The code displayed below is a python code which we used to do the standardization and PCA.  
+  </p>
+  
+  <figure class="chart-section">
+    <img src="charts/2_Standardizing_and_PCA.png" alt="PCA Chart - Untrimmed">
+    <figcaption>1.1. Python Code on Standardization and PCA Generation</figcaption>
+  </figure>
+  
+  <p>
+    So that being said, we let's take a look on the PCA of consumer goods as seen on the chart below:
+  </p>
+
+  <figure class="chart-section">
+    <img src="charts/1_PCA_of_CPI_untrimmed.png" alt="PCA Chart - Untrimmed">
+    <figcaption>1.2. PCA of Consumer Price Index</figcaption>
+  </figure>
+
+  <p>
+    Our PCA chart has two (2) dimensions, with the x-axis being the PC1 and y-axis being the PC2. To further disect the PCA, we take a look on the figure below to see the the scores of each PCA, namely PC1 and PC2.
+  </p>
+
+  <figure class="chart-section">
+    <img src="charts/9_PC1_and_PC2_untrimmed.png" alt="PCA Chart - Untrimmed">
+    <figcaption>1.3. PC1 and PC2 Scores</figcaption>
+  </figure>
+
+  <p>
+    Notice that PC1 already explains 99.71% of the variance vs that of 0.21% from PC2. This means that PC1 is more corelated to CPI values than PC2. With that, we focus on the x-axis component of figure 1.1.
+  </p>
+  
+  <p>
+    Based on the result of the PCA, "Alcoholic Beverages and Tobacco" yielded the highest score, while "Information and Communication" had the lowest score. Could it be the case that "Alcoholic Beverages and Tobacco" is more susceptible to inflation, while "Information and Communication" is more resilient? For simplicity, the figure below shows the top 5 highest PC1 and the top 5 lowest PC1.
+  </p>
+
+   <figure class="chart-section">
+    <img src="charts/10_Top_PC1_and_PC2_untrimmed.png" alt="PCA Chart - Untrimmed">
+    <figcaption>1.4. Top 5 Highest and Top 5 Lowest PC1</figcaption>
+  </figure>
+
+  <p>
+    From the Top 5 highest PC1, "Alcoholic Beverages and Tobacco" stands out the most as it does not only record the highest PC1, but its PC1 score is 3x more than the second highest. While, "Information and Communication" have lowest PC1 scores across all commodities. To further visualize the gaps between commodities and their relationship to CPI, we'll be using K-Means Clustering. But assigning the value of K would be vital. So we'll be gathering the respective Silhouette Scores of each value of K from 1 to 10. We'll be using the Python code below to plot the result.
+  </p>
+  
+  <figure class="chart-section">
+    <img src="charts/3_Silhouette_Score_trimmed_py_code.png" alt="PCA Chart - Untrimmed">
+    <figcaption>1.5. Python Code for Determining K via Silhouette Score</figcaption>
+  </figure>
+
+  <p>
+    After using the python code, we end up with the chart below. It is evident that k=2 had the highest Silhouette Score, meaning we'll be using only 2 clusters for our clustering.
+  </p>
+  
+  <figure class="chart-section">
+    <img src="charts/6_Silhouette_Score_untrimmed.png" alt="PCA Chart - Untrimmed">
+    <figcaption>1.6. Result of Silhouette Score</figcaption>
+  </figure>
+
+  <p>
+    However, just by looking at the clustering figure below, it is easy to see that one outlier belongs to no group. Going back to figure 1.2, we know that the outlier is "Alcoholic Beverages and Tobacco". This comes as no surprise since it recorded the highest PC1 score earlier, even exceeding more than 3x the second in terms of PC1 score. Furthermore, the Philippine Government has a law, called "Sin Tax Reform Law of 2012", where "Alcoholic Beverages and Tobacco" (ABT) is imposed more taxes compared to other commodity goods. Hence, price for ABT is more driven by policy regulation rather than inflation, resulting to sharp increase in price. Hence, it would be best to remove ABT from the data set in order to avoid skewing our results and analysis.
+  </p>
+
+  <figure class="chart-section">
+    <img src="charts/4_KMeans_untrimmed.png" alt="PCA Chart - Untrimmed">
+    <figcaption>1.7. K-Means Clustering</figcaption>
+  </figure>
+
+  <h2>Key Insights and Refined Clustering</h2>
+  
+  <p>
+    With that, we end up with a trimmed PCA chart as shown below. This PCA chart excludes ABT from the data set as it is considered an outlier and would not help in identifying actual clusters of commodity goods.
+  </p>
+  
+  <p>
+    After removing ABT from the chart, the range of PC1 and PC2 are now tighter compared to that of figure 1.2. Furthermore, the explained variance calculated for the new trimmed data is 99.12% and 0.63% for PC1 and PC2, respectively. This indicates that the initial result of PC1 holding more value over PC2 still holds true for our trimmed data.
+  </p>
+  
+  <figure class="chart-section">
+    <img src="charts/5_PCA_of_CPI_trimmed.png" alt="PCA Chart - Untrimmed">
+    <figcaption>2.1. PCA of Consumer Price Index (Trimmed)</figcaption>
+  </figure>
+  
+  <p>
+  We then proceed to check if there is difference in the recommendation of K based on Silhouette score.  
+  </p>
+
+  <figure class="chart-section">
+    <img src="charts/7_Silhouette_Score_trimmed.png" alt="PCA Chart - Untrimmed">
+    <figcaption>2.2. Updated Result of Silhouette Score based on Trimmed CPI</figcaption>
+  </figure>
+  
+  <p>
+    Based on the result of the updated Silhouette Score above, four (4) would be the optimal assignement of number of clusters.
+  </p>
+
+  <figure class="chart-section">
+    <img src="charts/8_KMeans_trimmed.png" alt="PCA Chart - Untrimmed">
+    <figcaption>2.3. K-Means Cluster of Trimmed CPI</figcaption>
+  </figure>
+
+  <p>
+    We then end up with the clustering chart above. We can identify four (4) unique clusters, namely: red, brown, purple, and grey.
+  </p>
+
+  <ul>
+    <li>The red cluster consists of basic necessities and consistent services like sports, recreation, water, and education. The red cluster usually falls between -2.5 to 0 PC1. These commodities are less volatile to price changes.</li>
+    <li>The brown cluster consists of goods more sensitive to external economic conditions like transportion, food, accomodation, and restaurants. It falls between +2.5 to +5 of PC1.</li>
+    <li>The purple cluster consists only of Financial Services. This might indicate that Financial Services are highly volatile to price changes and inflation. Since financial institutions depend on lending margins, credit demand, and investment returns, they are sensitive to interest rate changes, which are driven by CPI. Inflation could also reduce consumers' purchasing power which could be more riskier for financial institutions which could then lead to them increasing rates to mitigate possible losses.</li>
+    <li>The grey cluster consists only of Information and Communication. It has a PC1 of less than -7.5. This might indicate that inflation doesn't really trigger change in its prices. Internet and other communication means prices are relatively stable. Adding more context to their costs also helps understand why they're rarely affected by inflation. For simplicity, their fixed costs are high, but their variable costs are low. Towers, cables, and satellites are materials needed for their business and comes with high capital. However, they have low variable cost per user. Hence, need for price changes is rarely needed. It could also be the case that there could have been changes in the perception and need for internet. Previously, internet was seen as a luxury rather than a necessity, but with current subscription prices and it's demand inelasticity, this could point out that internat has now been a necessity for some or at least perceived as a necessity.</li>
+  </ul>
+
+  <p>
+    Overall, this study only shows commodities and goods that are more related to each other and how changes in CPI affect each cluster as a whole. A further study across all commodities per identified cluster would be great to further dig dive factors affecting each prices and consumer behavior.
+  </p>
+  
+</body>
+</html>
