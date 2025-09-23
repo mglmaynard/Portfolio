@@ -159,14 +159,37 @@
 
 <p>
   Recognizing these limitations, we next use a <strong>Kernel Density Estimate (KDE)</strong> to visualize the rental price distribution more flexibly, without assuming any particular distribution form.
-</p>
+</p>  
 
-  
+<figure class="chart-section">
+  <img src="KDE_charts/5.1_KDE.png" alt="Price Distribution of Housing Rent on NCR and Region IV-A">
+  <figcaption>1.7. Kernel Density Estimate (KDE) on Rental Prices of NCR</figcaption>
+</figure>
+
+<p>
+  Likewise, let's add the result of Region IV-A
+</p>
 
 <figure class="chart-section">
   <img src="KDE_charts/5_KDE.png" alt="Price Distribution of Housing Rent on NCR and Region IV-A">
-  <figcaption>1.7. Kernel Density Estimate (KDE) on Rental Prices</figcaption>
+  <figcaption>1.8. Kernel Density Estimate (KDE) on Rental Prices of Region IV-A</figcaption>
 </figure>
+
+<p>
+  The rental price data available is reported in <strong>discrete price ranges (brackets)</strong> rather than exact continuous values. Each price range (e.g., <em>Php 1,001–Php 1,500</em>) groups households paying rent within that interval, which means the data is <strong>grouped and categorical</strong> in nature.
+</p>
+
+<p>
+  To perform a more detailed analysis, we approximated these brackets by their <strong>midpoint values</strong> (e.g., <em>Php 1,250</em> for the <em>Php 1,001–Php 1,500</em> range). By repeating these midpoint values according to the number of households in each bracket, we constructed a <strong>weighted dataset</strong> that simulates individual rental prices.
+</p>
+
+<p>
+  Using this weighted dataset, we applied a <strong>Kernel Density Estimate (KDE)</strong>, a statistical tool that creates a smooth, continuous curve representing the distribution of rental prices. Although the original data is grouped, KDE helps approximate the underlying continuous distribution by smoothing the weighted midpoints.
+</p>
+
+<p>
+  This approach provides a more intuitive and detailed visualization of rental price patterns, revealing clusters and multiple common rent levels that would be difficult to see with grouped bar charts alone.
+</p>
 
   
 </body>
