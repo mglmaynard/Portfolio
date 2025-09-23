@@ -59,34 +59,71 @@
   <h2>Price Distribution of Housing Rent on NCR and Region IV-A</h2>
 
   <p>
-    Before we begin our analysis, let's take a look at price distribution of housing rents for NCR and Region IV-A.
+    Before we begin our analysis, let's take a look at price distribution of housing rents for NCR.
   </p>
       
   <figure class="chart-section">
     <img src="KDE_charts/1_Raw_Data_Distribution.png" alt="Price Distribution of Housing Rent on NCR and Region IV-A">
-    <figcaption>1.1. Price Distribution of Housing Rent on NCR and Region IV-A</figcaption>
+    <figcaption>1.1. Price Distribution of Housing Rent on NCR</figcaption>
+  </figure>
+
+  <p>
+    Similarly, let's do the same for Region IV-A
+  </p>
+      
+  <figure class="chart-section">
+    <img src="KDE_charts/1.2_Raw_Data_Distribution.png" alt="Price Distribution of Housing Rent on NCR and Region IV-A">
+    <figcaption>1.2. Price Distribution of Housing Rent on Region IV-A</figcaption>
   </figure>
   
   <p>
-    So that being said, we let's take a look on the PCA of consumer goods as seen on the chart below:
+    It is noticeable that both regions had it's peak on the range of Php 4-6K. Curious on the share of distribution of each range, we take a look on the side-by-side comparison of their share below:
   </p>
 
   <figure class="chart-section">
-    <img src="charts/1_PCA_of_CPI_untrimmed.png" alt="PCA Chart - Untrimmed">
-    <figcaption>1.2. PCA of Consumer Price Index</figcaption>
+    <img src="KDE_charts/2_percent_dist.png" alt="Price Distribution of Housing Rent on NCR and Region IV-A">
+    <figcaption>1.3. Share of Distribution of each Price Range</figcaption>
   </figure>
 
   <p>
-    Our PCA chart has two (2) dimensions, with the x-axis being the PC1 and y-axis being the PC2. To further disect the PCA, we take a look on the figure below to see the the scores of each PCA, namely PC1 and PC2.
+    Based on figure 1.3, NCR has higher shares on the ranges exceeding Php 6K, while Region IV-A has higher shares on the ranges below Php 4K. This is indicative to the thought that renting households in Region IV-A are more price sensitive compared to those in NCR. Furthermore, figure 1.3 seems to follow a normally distributed curve. Is it the case that household rentals for NCR and Region IV-A are normally distributed? To answer that let's take a look at the chart below:
   </p>
 
   <figure class="chart-section">
-    <img src="charts/9_PC1_and_PC2_untrimmed.png" alt="PCA Chart - Untrimmed">
-    <figcaption>1.3. PC1 and PC2 Scores</figcaption>
+    <img src="KDE_charts/3.1_test_for_noormality.png" alt="Price Distribution of Housing Rent on NCR and Region IV-A">
+    <figcaption>1.4. Density of NCR Household Rental Prices</figcaption>
   </figure>
 
   <p>
-    Notice that PC1 already explains 99.71% of the variance vs that of 0.21% from PC2. This means that PC1 is more corelated to CPI values than PC2. With that, we focus on the x-axis component of figure 1.1.
+    In this analysis, we examined the distribution of rental prices in NCR using grouped data categorized into price brackets. Since the data is reported in ranges (e.g., Php 1,001–Php 1,500), we represented each price bracket by its midpoint value to approximate the rental price for that category.
+  </p>
+
+  <p>
+    To analyze the distribution more accurately, we created a weighted dataset by repeating each midpoint value according to the number of renter households in that price bracket. For example, if 25,699 households fall within the Php 1,001–Php 1,500 bracket, the midpoint of Php 1,250 was repeated 25,699 times to simulate individual rental prices.
+  </p>
+
+  <p>
+    From this weighted dataset, we calculated two key statistical parameters:
+
+Mean (μ): The average rental price, indicating the central tendency of the data.
+
+Standard Deviation (σ): The measure of spread or variability in rental prices around the mean.
+  </p>
+
+  <p>
+  Using these parameters, we fitted a normal distribution curve to the data. The normal distribution is a well-known probability distribution characterized by its bell shape and is commonly used to model real-world continuous data. The curve's shape is determined by the mean and standard deviation of the dataset.  
+  </p>
+
+  <p>
+    Plotting this curve alongside the histogram of actual rental prices allowed us to visually assess how closely the rental price data follows a normal distribution. This approach helps summarize the rental market, identify typical rental price ranges, and understand the variability in prices.
+  </p>
+
+  <p>
+    By modeling the data in this way, we gain insights that can support forecasting, decision-making, and further statistical analyses.
+  </p>
+  
+  <p>
+    We can see that NCR household rental prices doesn't follow a normal distribution pattern.
   </p>
   
   <p>
