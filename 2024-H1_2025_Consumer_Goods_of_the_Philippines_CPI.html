@@ -6,28 +6,44 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      max-width: 800px;
+      max-width: 900px;
       margin: auto;
       padding: 40px;
-      background-color: #f9f9f9;
-      line-height: 1.6;
+      background-color: #121212; /* Deep black */
+      color: #f5f5f5; /* White text */
+      line-height: 1.7;
     }
+
     h1, h2 {
-      color: #333;
+      color: #e0e0e0; /* Soft silver-white */
+      border-bottom: 2px solid #444; /* Silver divider */
+      padding-bottom: 8px;
     }
-    img {
-      width: 100%;
-      max-width: 700px;
-      margin: 20px 0;
-      border: 1px solid #ccc;
+
+    p, li {
+      color: #f5f5f5;
     }
-    .chart-section {
-      margin-bottom: 50px;
-    }
+
     ul {
       margin-top: 10px;
       margin-bottom: 10px;
+      padding-left: 20px;
     }
+
+    img {
+      width: 100%;
+      max-width: 750px;
+      margin: 20px 0;
+      border: 2px solid #666; /* Silver-gray border */
+      border-radius: 8px;
+      background-color: #1e1e1e; /* Dark frame behind charts */
+      padding: 5px;
+    }
+
+    .chart-section {
+      margin-bottom: 50px;
+    }
+
     figure {
       text-align: center;
       margin-bottom: 50px;
@@ -36,15 +52,71 @@
     figcaption {
       font-style: italic;
       font-size: 14px;
-      color: #555;
+      color: #b0b0b0; /* Silver caption */
       margin-top: 8px;
     }
 
+    nav {
+      background-color: #1e1e1e;
+      border: 1px solid #444;
+      border-radius: 6px;
+      padding: 15px;
+      margin-bottom: 30px;
+    }
+
+    nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #f5f5f5;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    nav ul li a:hover {
+      color: #c0c0c0; /* Silver hover */
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 30px 0;
+      background-color: #1e1e1e;
+    }
+
+    table th, table td {
+      border: 1px solid #444;
+      padding: 10px;
+      text-align: left;
+      color: #f5f5f5;
+    }
+
+    table th {
+      background-color: #2a2a2a;
+      color: #dcdcdc;
+    }
   </style>
 </head>
 <body>
 
   <h1>2024 - H1 2025 Analysis of Consumer Price Index (CPI) of the Philippines</h1>
+
+  <nav>
+    <ul>
+      <li><a href="#context">Context</a></li>
+      <li><a href="#eda">EDA</a></li>
+      <li><a href="#insights">Key Insights</a></li>
+      <li><a href="#clusters">Clusters</a></li>
+      <li><a href="#conclusion">Conclusion</a></li>
+    </ul>
+  </nav>
   
   <h2>Context and Objective</h2>
   
