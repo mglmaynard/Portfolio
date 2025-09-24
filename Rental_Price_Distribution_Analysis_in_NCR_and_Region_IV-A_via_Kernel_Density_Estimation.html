@@ -6,28 +6,44 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      max-width: 800px;
+      max-width: 900px;
       margin: auto;
       padding: 40px;
-      background-color: #f9f9f9;
-      line-height: 1.6;
+      background-color: #121212; /* Deep black */
+      color: #f5f5f5; /* White text */
+      line-height: 1.7;
     }
+
     h1, h2 {
-      color: #333;
+      color: #e0e0e0; /* Soft silver-white */
+      border-bottom: 2px solid #444; /* Silver divider */
+      padding-bottom: 8px;
     }
-    img {
-      width: 100%;
-      max-width: 700px;
-      margin: 20px 0;
-      border: 1px solid #ccc;
+
+    p, li {
+      color: #f5f5f5;
     }
-    .chart-section {
-      margin-bottom: 50px;
-    }
+
     ul {
       margin-top: 10px;
       margin-bottom: 10px;
+      padding-left: 20px;
     }
+
+    img {
+      width: 100%;
+      max-width: 750px;
+      margin: 20px 0;
+      border: 2px solid #666; /* Silver-gray border */
+      border-radius: 8px;
+      background-color: #1e1e1e; /* Dark frame behind charts */
+      padding: 5px;
+    }
+
+    .chart-section {
+      margin-bottom: 50px;
+    }
+
     figure {
       text-align: center;
       margin-bottom: 50px;
@@ -36,195 +52,131 @@
     figcaption {
       font-style: italic;
       font-size: 14px;
-      color: #555;
+      color: #b0b0b0; /* Silver caption */
       margin-top: 8px;
     }
 
+    nav {
+      background-color: #1e1e1e;
+      border: 1px solid #444;
+      border-radius: 6px;
+      padding: 15px;
+      margin-bottom: 30px;
+    }
+
+    nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #f5f5f5;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    nav ul li a:hover {
+      color: #c0c0c0; /* Silver hover */
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 30px 0;
+      background-color: #1e1e1e;
+    }
+
+    table th, table td {
+      border: 1px solid #444;
+      padding: 10px;
+      text-align: left;
+      color: #f5f5f5;
+    }
+
+    table th {
+      background-color: #2a2a2a;
+      color: #dcdcdc;
+    }
   </style>
 </head>
 <body>
 
   <h1>Rental Price Distribution Analysis in NCR and Region IV-A via Kernel Density Estimation</h1>
-  
-  <h2>Introduction</h2>
-  
+
+  <nav>
+    <ul>
+      <li><a href="#introduction">Introduction</a></li>
+      <li><a href="#distribution">Price Distribution</a></li>
+      <li><a href="#normality">Test for Normality</a></li>
+      <li><a href="#kde">Kernel Density Estimate</a></li>
+      <li><a href="#conclusion">Conclusion</a></li>
+    </ul>
+  </nav>
+
+  <h2 id="introduction">Introduction</h2>
   <p>
     This study focuses on the National Capital Region (NCR) and Region IV-A (Calabarzon) due to their significant economic contributions and high population densities within the Philippines. NCR contributes around 36% of the country’s GDP and is the most densely populated region. Region IV-A is the fastest-growing region and accounts for about 20% of the national GDP.
   </p>
-  
   <p>
     Both regions experience strong demand for rental housing driven by rapid urbanization and diverse housing needs, ranging from affordable units to high-end apartments. Understanding rental price distributions in these areas is crucial for informed housing policies and development strategies addressing the country’s most dynamic rental markets.
   </p>
 
-  <h2>Price Distribution of Housing Rent on NCR and Region IV-A</h2>
+  <h2 id="distribution">Price Distribution of Housing Rent on NCR and Region IV-A</h2>
 
-  <p>
-    Before we begin our analysis, let's take a look at price distribution of housing rents for NCR.
-  </p>
-      
   <figure class="chart-section">
-    <img src="KDE_charts/1_Raw_Data_Distribution.png" alt="Price Distribution of Housing Rent on NCR and Region IV-A">
+    <img src="KDE_charts/1_Raw_Data_Distribution.png" alt="Price Distribution of Housing Rent on NCR">
     <figcaption>1.1. Price Distribution of Housing Rent on NCR</figcaption>
   </figure>
 
-  <p>
-    Similarly, let's do the same for Region IV-A
-  </p>
-      
   <figure class="chart-section">
-    <img src="KDE_charts/1.2_Raw_Data_Distribution.png" alt="Price Distribution of Housing Rent on NCR and Region IV-A">
+    <img src="KDE_charts/1.2_Raw_Data_Distribution.png" alt="Price Distribution of Housing Rent on Region IV-A">
     <figcaption>1.2. Price Distribution of Housing Rent on Region IV-A</figcaption>
   </figure>
-  
-  <p>
-    It is noticeable that both regions had it's peak on the range of Php 4-6K. Curious on the share of distribution of each range, we take a look on the side-by-side comparison of their share below:
-  </p>
 
   <figure class="chart-section">
-    <img src="KDE_charts/2_percent_dist.png" alt="Price Distribution of Housing Rent on NCR and Region IV-A">
+    <img src="KDE_charts/2_percent_dist.png" alt="Share of Distribution of each Price Range">
     <figcaption>1.3. Share of Distribution of each Price Range</figcaption>
   </figure>
 
-  <h2>Test for Normality</h2>
-  
-  <p>
-    Based on figure 1.3, NCR has higher shares on the ranges exceeding Php 6K, while Region IV-A has higher shares on the ranges below Php 4K. This is indicative to the thought that renting households in Region IV-A are more price sensitive compared to those in NCR. Furthermore, figure 1.3 seems to follow a normally distributed curve. Is it the case that household rentals for NCR and Region IV-A are normally distributed? To answer that let's take a look at the chart below:
-  </p>
-
+  <h2 id="normality">Test for Normality</h2>
   <figure class="chart-section">
-    <img src="KDE_charts/3.1_test_for_noormality.png" alt="Price Distribution of Housing Rent on NCR and Region IV-A">
+    <img src="KDE_charts/3.1_test_for_noormality.png" alt="Density of NCR Household Rental Prices">
     <figcaption>1.4. Density of NCR Household Rental Prices</figcaption>
   </figure>
 
-  <p>
-    In this analysis, we examined the distribution of rental prices in NCR using grouped data categorized into price brackets. Since the data is reported in ranges (e.g., Php 1,001–Php 1,500), we represented each price bracket by its midpoint value to approximate the rental price for that category.
-  </p>
-
-  <p>
-    To analyze the distribution more accurately, we created a weighted dataset by repeating each midpoint value according to the number of renter households in that price bracket. For example, if 25,699 households fall within the Php 1,001–Php 1,500 bracket, the midpoint of Php 1,250 was repeated 25,699 times to simulate individual rental prices.
-  </p>
-
-  <p> From this weighted dataset, we calculated two key statistical parameters: <strong>Mean (μ)</strong>: The weighted average rental price, representing the central tendency of the data. <strong>Standard Deviation (σ)</strong>: A measure of the dispersion or variability in rental prices around the mean, indicating how spread out the values are.
-  </p>
-
-  <p>
-  Using these parameters, we fitted a normal distribution curve to the data. The normal distribution is a well-known probability distribution characterized by its bell shape and is commonly used to model real-world continuous data. The curve's shape is determined by the mean and standard deviation of the dataset.  
-  </p>
-
-  <p>
-    Plotting this curve alongside the histogram of actual rental prices allowed us to visually assess how closely the rental price data follows a normal distribution. This approach helps summarize the rental market, identify typical rental price ranges, and understand the variability in prices.
-  </p>
-
-  <p>
-    By modeling the data in this way, we gain insights that can support forecasting, decision-making, and further statistical analyses.
-  </p>
-
-  <p>
-    Likewise, we do the same for Region IV-A.
-  </p>
-
   <figure class="chart-section">
-    <img src="KDE_charts/3_test_for_noormality.png" alt="Price Distribution of Housing Rent on NCR and Region IV-A">
+    <img src="KDE_charts/3_test_for_noormality.png" alt="Density of Region IV-A Household Rental Prices">
     <figcaption>1.5. Density of Region IV-A Household Rental Prices</figcaption>
   </figure>
-  
-  <p>
-    We can see that both NCR and Region IV-A household rental prices doesn't reachy follow a normal distribution pattern, contrary to what was initially thought.
-  </p>
-
-  <p>
-    to further confirm whether household rentals do not follow a normal distribution for NCR and Region IV-A. Let's do a quick standard statistical test:
-  </p>
 
   <figure class="chart-section">
-    <img src="KDE_charts/4_real_test_for_normality.png" alt="Price Distribution of Housing Rent on NCR and Region IV-A">
-    <figcaption>1.6. Shapiro-Wilk test and the Kolmogorov-Smirnov (KS) test on Rental Prices of NCR and Region IV-A</figcaption>
+    <img src="KDE_charts/4_real_test_for_normality.png" alt="Statistical test on Rental Prices of NCR and Region IV-A">
+    <figcaption>1.6. Shapiro-Wilk test and Kolmogorov-Smirnov (KS) test</figcaption>
   </figure>
 
-<p>
-  To assess whether the rental price data follows a normal distribution, we conducted two standard statistical tests: the <strong>Shapiro-Wilk test</strong> and the <strong>Kolmogorov-Smirnov (KS) test</strong>. Both tests evaluate the hypothesis that the data is normally distributed.
-</p>
+  <h2 id="kde">Kernel Density Estimate (KDE)</h2>
+  <figure class="chart-section">
+    <img src="KDE_charts/5.1_KDE.png" alt="KDE on Rental Prices of NCR">
+    <figcaption>1.7. Kernel Density Estimate (KDE) on Rental Prices of NCR</figcaption>
+  </figure>
 
-<p>
-  Our analysis used <em>weighted samples</em> created by replicating rental price midpoints according to the number of households in each price bracket. Given the large sample size (over a million data points per region), the tests were sensitive to even small deviations from normality.
-</p>
+  <figure class="chart-section">
+    <img src="KDE_charts/5_KDE.png" alt="KDE on Rental Prices of Region IV-A">
+    <figcaption>1.8. Kernel Density Estimate (KDE) on Rental Prices of Region IV-A</figcaption>
+  </figure>
 
-<p><strong>The results were as follows:</strong></p>
-<ul>
-  <li>Both the Shapiro-Wilk and Kolmogorov-Smirnov tests yielded very low p-values (<em>p &lt; 0.001</em>) for NCR and Region IV-A.</li>
-  <li>A low p-value indicates strong evidence to reject the assumption of normality in the rental price data.</li>
-</ul>
+  <h2 id="conclusion">Conclusion</h2>
+  <p>
+    Analyzing the rental price data for <strong>NCR</strong> and <strong>Region IV-A</strong> reveals a complex and diverse rental market. The data does not perfectly follow a normal distribution, which is expected given the grouping of prices and market diversity. The <strong>Kernel Density Estimate (KDE)</strong> plots further highlight this by showing multiple peaks, indicating distinct renter groups across different price ranges.
+  </p>
+  <p>
+    This insight is valuable for understanding the rental landscape more deeply. It emphasizes the need for <strong>tailored approaches</strong> in housing policies, development planning, and market strategies that consider the varied segments within the rental market. By recognizing these patterns, stakeholders can better address the specific needs of renters and promote more effective housing solutions.
+  </p>
 
-<p>
-  This outcome suggests that while the data may appear somewhat bell-shaped visually, it does not perfectly conform to a normal distribution. This deviation is common in real-world data, especially when prices are grouped into brackets and influenced by market factors.
-</p>
-
-<p>
-  Recognizing these limitations, we next use a <strong>Kernel Density Estimate (KDE)</strong> to visualize the rental price distribution more flexibly, without assuming any particular distribution form.
-</p>  
-
-<h2>Kernel Density Estimate</h2>
-  
-<figure class="chart-section">
-  <img src="KDE_charts/5.1_KDE.png" alt="Price Distribution of Housing Rent on NCR and Region IV-A">
-  <figcaption>1.7. Kernel Density Estimate (KDE) on Rental Prices of NCR</figcaption>
-</figure>
-
-<p>
-  Likewise, let's add the result of Region IV-A
-</p>
-
-<figure class="chart-section">
-  <img src="KDE_charts/5_KDE.png" alt="Price Distribution of Housing Rent on NCR and Region IV-A">
-  <figcaption>1.8. Kernel Density Estimate (KDE) on Rental Prices of Region IV-A</figcaption>
-</figure>
-
-<p>
-  The rental price data available is reported in <strong>discrete price ranges (brackets)</strong> rather than exact continuous values. Each price range (e.g., <em>Php 1,001–Php 1,500</em>) groups households paying rent within that interval, which means the data is <strong>grouped and categorical</strong> in nature.
-</p>
-
-<p>
-  To perform a more detailed analysis, we approximated these brackets by their <strong>midpoint values</strong> (e.g., <em>Php 1,250</em> for the <em>Php 1,001–Php 1,500</em> range). By repeating these midpoint values according to the number of households in each bracket, we constructed a <strong>weighted dataset</strong> that simulates individual rental prices.
-</p>
-
-<p>
-  Using this weighted dataset, we applied a <strong>Kernel Density Estimate (KDE)</strong>, a statistical tool that creates a smooth, continuous curve representing the distribution of rental prices. Although the original data is grouped, KDE helps approximate the underlying continuous distribution by smoothing the weighted midpoints.
-</p>
-
-<p>
-  This approach provides a more intuitive and detailed visualization of rental price patterns, revealing clusters and multiple common rent levels that would be difficult to see with grouped bar charts alone.
-</p>
-
-<p>
-  The <strong>Kernel Density Estimate (KDE)</strong> plots for both NCR and Region IV-A show several noticeable peaks in the rental price distributions. This means the data is <em>multi-modal</em>, where rental prices tend to cluster around multiple common values instead of just one average.
-</p>
-
-<p>This happens because:</p>
-<ul>
-  <li>
-    Different types of rental properties—such as affordable housing, mid-range apartments, and high-end units—attract renters with different budgets, creating distinct clusters.
-  </li>
-  <li>
-    Variations in household income, neighborhood characteristics, and housing quality lead to multiple groups of renters paying different rent amounts.
-  </li>
-  <li>
-    The original data is grouped in price brackets, which can highlight these clusters by how households are counted in each range.
-  </li>
-</ul>
-
-<p>
-  Understanding these multiple peaks is important because it shows how diverse the rental market really is. Recognizing the existence of different renter groups helps landlords, policymakers, and developers create strategies tailored to each segment’s needs.
-</p>
-
-<h2>Conclusion</h2>
-<p>
-  Analyzing the rental price data for <strong>NCR</strong> and <strong>Region IV-A</strong> reveals a complex and diverse rental market. The data does not perfectly follow a normal distribution, which is expected given the grouping of prices and market diversity. The <strong>Kernel Density Estimate (KDE)</strong> plots further highlight this by showing multiple peaks, indicating distinct renter groups across different price ranges.
-</p>
-
-<p>
-  This insight is valuable for understanding the rental landscape more deeply. It emphasizes the need for <strong>tailored approaches</strong> in housing policies, development planning, and market strategies that consider the varied segments within the rental market. By recognizing these patterns, stakeholders can better address the specific needs of renters and promote more effective housing solutions.
-</p>
-
-  
 </body>
 </html>
