@@ -1,94 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>Checkers Game</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #fafafa;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  #checkersBoard {
-    display: grid;
-    grid-template-columns: repeat(8, 50px);
-    grid-template-rows: repeat(8, 50px);
-    gap: 0;
-    user-select: none;
-    border: 2px solid #444;
-  }
-  .square {
-    width: 50px;
-    height: 50px;
-    box-sizing: border-box;
-    position: relative;
-  }
-  .light {
-    background: #eee;
-  }
-  .dark {
-    background: #666;
-  }
-  .dark.highlight {
-    outline: 3px solid #f39c12;
-  }
-  .piece {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    box-sizing: border-box;
-    cursor: pointer;
-  }
-  .red {
-    background: #e74c3c;
-    border: 2px solid #c0392b;
-  }
-  .black {
-    background: #2c3e50;
-    border: 2px solid #1c2833;
-  }
-  .king {
-    box-shadow: 0 0 10px 3px gold;
-  }
-  #status {
-    margin-top: 15px;
-    font-size: 1.2rem;
-    min-height: 24px;
-  }
-  #controls {
-    margin-top: 15px;
-  }
-  #controls button {
-    padding: 8px 15px;
-    cursor: pointer;
-    border: none;
-    border-radius: 4px;
-    background: #3498db;
-    color: white;
-    user-select: none;
-    margin: 0 5px;
-  }
-  #controls button:hover {
-    background: #2980b9;
-  }
-  #history {
-    margin-top: 15px;
-    max-height: 150px;
-    overflow-y: auto;
-    font-family: monospace;
-    background: #f4f4f4;
-    padding: 10px;
-    width: 400px;
-    border-radius: 4px;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <title>Checkers Game - Local Multiplayer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fafafa;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #checkersBoard {
+      display: grid;
+      grid-template-columns: repeat(8, 50px);
+      grid-template-rows: repeat(8, 50px);
+      border: 2px solid #444;
+    }
+    .square {
+      width: 50px;
+      height: 50px;
+      position: relative;
+    }
+    .light { background: #eee; }
+    .dark { background: #666; }
+    .dark.highlight { outline: 3px solid #f39c12; }
+
+    .piece {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      cursor: pointer;
+    }
+    .red {
+      background: #e74c3c;
+      border: 2px solid #c0392b;
+    }
+    .black {
+      background: #2c3e50;
+      border: 2px solid #1c2833;
+    }
+    .king {
+      box-shadow: 0 0 10px 3px gold;
+    }
+
+    #status {
+      margin-top: 15px;
+      font-size: 1.2rem;
+      min-height: 24px;
+    }
+
+    #controls {
+      margin-top: 15px;
+    }
+
+    #controls button {
+      padding: 8px 15px;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+      background: #3498db;
+      color: white;
+      margin: 0 5px;
+    }
+
+    #controls button:hover {
+      background: #2980b9;
+    }
+
+    #history {
+      margin-top: 15px;
+      max-height: 150px;
+      overflow-y: auto;
+      font-family: monospace;
+      background: #f4f4f4;
+      padding: 10px;
+      width: 400px;
+      border-radius: 4px;
+    }
+  </style>
 </head>
 <body>
 
@@ -112,7 +107,7 @@
   const historyEl = document.getElementById('history');
 
   let game = {
-    board: [],  // 8x8 grid, 'r' = red, 'R' = red king, 'b' = black, 'B' = black king, null = empty
+    board: [],
     turn: 'r',
     selected: null,
     possibleMoves: [],
@@ -129,14 +124,15 @@
     statusEl.textContent = "Red to move";
     historyEl.innerHTML = '';
 
-    for(let r = 0; r < 8; r++) {
+    for (let r = 0; r < 8; r++) {
       game.board[r] = [];
-      for(let c = 0; c < 8; c++) {
+      for (let c = 0; c < 8; c++) {
         game.board[r][c] = null;
         const square = document.createElement('div');
         square.classList.add('square');
         square.dataset.row = r;
         square.dataset.col = c;
+
         if ((r + c) % 2 === 0) {
           square.classList.add('light');
         } else {
@@ -149,6 +145,7 @@
             square.appendChild(createPiece('r'));
           }
         }
+
         square.addEventListener('click', onSquareClick);
         boardEl.appendChild(square);
       }
@@ -162,14 +159,13 @@
   }
 
   function onSquareClick(e) {
-    if (!game.turn) return; // game over
+    if (!game.turn) return;
 
     const sq = e.currentTarget;
     const r = +sq.dataset.row;
     const c = +sq.dataset.col;
     const piece = game.board[r][c];
 
-    // If already selected and clicked on a highlighted move, move there
     if (game.selected) {
       const validMove = game.possibleMoves.find(m => m.to[0] === r && m.to[1] === c);
       if (validMove) {
@@ -178,7 +174,6 @@
       }
     }
 
-    // If clicking on own piece, select it and highlight moves
     if (piece && piece.toLowerCase() === game.turn) {
       game.selected = [r, c];
       game.possibleMoves = getMoves(r, c);
@@ -215,8 +210,6 @@
     return r >= 0 && r < 8 && c >= 0 && c < 8;
   }
 
-  // Get possible moves for piece at r,c
-  // returns array of moves: {from: [r,c], to: [r,c], capture: [r,c] or null}
   function getMoves(r, c) {
     const piece = game.board[r][c];
     if (!piece) return [];
@@ -228,69 +221,59 @@
     if (piece.toLowerCase() === 'b' || isKing) directions.push([1, -1], [1, 1]);
 
     const moves = [];
-    const captureMoves = [];
+    const captures = [];
 
     for (const [dr, dc] of directions) {
       const nr = r + dr;
       const nc = c + dc;
-      const jr = r + 2*dr;
-      const jc = c + 2*dc;
+      const jr = r + 2 * dr;
+      const jc = c + 2 * dc;
 
       if (isValid(jr, jc) && game.board[jr][jc] === null) {
         const enemy = isValid(nr, nc) ? game.board[nr][nc] : null;
         if (enemy && enemy.toLowerCase() !== piece.toLowerCase()) {
-          captureMoves.push({from: [r, c], to: [jr, jc], capture: [nr, nc]});
+          captures.push({ from: [r, c], to: [jr, jc], capture: [nr, nc] });
         }
       }
     }
-    if (captureMoves.length) return captureMoves;
 
-    // No captures, check normal moves
+    if (captures.length) return captures;
+
     for (const [dr, dc] of directions) {
       const nr = r + dr;
       const nc = c + dc;
       if (isValid(nr, nc) && game.board[nr][nc] === null) {
-        moves.push({from: [r, c], to: [nr, nc], capture: null});
+        moves.push({ from: [r, c], to: [nr, nc], capture: null });
       }
     }
+
     return moves;
   }
 
   function makeMove(move) {
-    const fromR = move.from[0];
-    const fromC = move.from[1];
-    const toR = move.to[0];
-    const toC = move.to[1];
+    const [fromR, fromC] = move.from;
+    const [toR, toC] = move.to;
     const piece = game.board[fromR][fromC];
 
-    // Save current state for undo
     game.moveHistory.push(JSON.stringify({
       board: game.board.map(row => row.slice()),
       turn: game.turn
     }));
 
-    // Move piece
     game.board[toR][toC] = piece;
     game.board[fromR][fromC] = null;
 
-    // Remove captured piece if any
     if (move.capture) {
-      const capR = move.capture[0];
-      const capC = move.capture[1];
+      const [capR, capC] = move.capture;
       game.board[capR][capC] = null;
     }
 
-    // Promotion to king
-    if (piece === 'r' && toR === 0) {
-      game.board[toR][toC] = 'R';
-    }
-    if (piece === 'b' && toR === 7) {
-      game.board[toR][toC] = 'B';
-    }
+    // Promote
+    if (piece === 'r' && toR === 0) game.board[toR][toC] = 'R';
+    if (piece === 'b' && toR === 7) game.board[toR][toC] = 'B';
 
-    // Check for additional capture for multi-jump if this was capture move
     if (move.capture) {
-      const moreCaptures = getMoves(toR, toC).filter(mv => mv.capture !== null);
+      const moreCaptures = getMoves(toR, toC).filter(m => m.capture);
       if (moreCaptures.length > 0) {
         game.selected = [toR, toC];
         game.possibleMoves = moreCaptures;
@@ -298,11 +281,10 @@
         updateStatus();
         updateHistory();
         highlightMoves();
-        return; // do not change turn yet
+        return;
       }
     }
 
-    // Change turn
     game.turn = game.turn === 'r' ? 'b' : 'r';
     game.selected = null;
     game.possibleMoves = [];
@@ -318,16 +300,15 @@
   }
 
   function updateBoard() {
-    // Clear pieces
     boardEl.querySelectorAll('.square').forEach(sq => {
-      while(sq.firstChild) sq.removeChild(sq.firstChild);
+      while (sq.firstChild) sq.removeChild(sq.firstChild);
     });
 
-    for(let r = 0; r < 8; r++) {
-      for(let c = 0; c < 8; c++) {
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
         const piece = game.board[r][c];
         if (piece) {
-          const sq = getSquare(r,c);
+          const sq = getSquare(r, c);
           const pieceEl = createPiece(piece.toLowerCase());
           if (piece === piece.toUpperCase()) pieceEl.classList.add('king');
           sq.appendChild(pieceEl);
@@ -343,19 +324,18 @@
   }
 
   function updateHistory() {
-    let html = '';
-    for(let i = 0; i < game.moveHistory.length; i++) {
-      html += `Move ${i+1}<br>`;
+    historyEl.innerHTML = '';
+    for (let i = 0; i < game.moveHistory.length; i++) {
+      historyEl.innerHTML += `Move ${i + 1}<br>`;
     }
-    historyEl.innerHTML = html;
   }
 
   function isGameOver() {
     if (!game.turn) return true;
-    for(let r=0; r<8; r++) {
-      for(let c=0; c<8; c++) {
-        if (game.board[r][c] && game.board[r][c].toLowerCase() === game.turn) {
-          if (getMoves(r,c).length > 0) return false;
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        if (game.board[r][c]?.toLowerCase() === game.turn) {
+          if (getMoves(r, c).length > 0) return false;
         }
       }
     }
@@ -374,12 +354,9 @@
     updateHistory();
   });
 
-  resetBtn.addEventListener('click', () => {
-    initBoard();
-  });
+  resetBtn.addEventListener('click', () => initBoard());
 
   initBoard();
-
 </script>
 
 </body>
