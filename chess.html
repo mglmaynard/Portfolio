@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Advanced Chess with Stockfish & Undo & History & Multiplayer</title>
+  <title>Chess - Local Multiplayer</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/dist/chessboard.min.css" />
   <style>
@@ -53,27 +53,18 @@
       justify-content: center;
       gap: 10px;
     }
-    #modeSelector {
-      margin-top: 10px;
-    }
   </style>
 </head>
 <body>
 
-  <h1>Advanced Chess</h1>
-  
+  <h1>Chess - Local Multiplayer</h1>
+
   <div id="board"></div>
-  
   <div id="status"></div>
 
   <div id="controls">
     <button id="undoBtn" title="Undo last move">Undo</button>
     <button id="resetBtn" title="Reset game">Reset</button>
-  </div>
-
-  <div id="modeSelector">
-    <label><input type="radio" name="mode" value="human_vs_ai" checked> Play vs Stockfish AI</label>
-    <label><input type="radio" name="mode" value="human_vs_human"> Play vs Human (local)</label>
   </div>
 
   <h3>Move History</h3>
@@ -84,32 +75,6 @@
   <!-- Chess.js -->
   <script src="https://cdn.jsdelivr.net/npm/chess.js@1.0.0/chess.min.js"></script>
 
-  <!-- Stockfish WASM - using a CDN hosting stockfish.wasm -->
-  <script>
-    // Load Stockfish from public CDN
-    // Source: https://cdn.jsdelivr.net/gh/niklasf/stockfish.wasm@master/stockfish.wasm.js
-    // Note: In production better host locally or use official source
-    
-    // We'll load stockfish.js and stockfish.wasm via a promise for async startup
-    
-    function loadStockfish() {
-      return new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        script.src = "https://cdn.jsdelivr.net/gh/niklasf/stockfish.wasm@master/stockfish.js";
-        script.onload = () => {
-          if (typeof Stockfish === 'function') {
-            const engine = Stockfish();
-            resolve(engine);
-          } else {
-            reject(new Error('Stockfish not loaded'));
-          }
-        };
-        script.onerror = () => reject(new Error('Failed to load Stockfish'));
-        document.head.appendChild(script);
-      });
-    }
-  </script>
-
   <script>
     let board = null;
     const game = new Chess();
@@ -118,14 +83,6 @@
     const historyEl = document.getElementById('history');
     const undoBtn = document.getElementById('undoBtn');
     const resetBtn = document.getElementById('resetBtn');
-    const modeRadios = document.querySelectorAll('input[name="mode"]');
-
-    let stockfish = null;
-    let engineReady = false;
-    let engineThinking = false;
-
-    // Game mode: "human_vs_ai" or "human_vs_human"
-    let gameMode = "human_vs_ai";
 
     // Initialize chessboard.js
     function initBoard() {
@@ -141,42 +98,30 @@
       });
     }
 
-    // Prevent dragging opponent's pieces or when game over
-    function onDragStart(source, piece, position, orientation) {
+    // Prevent moving pieces out of turn
+    function onDragStart(source, piece) {
       if (game.game_over()) return false;
-      if (gameMode === 'human_vs_ai') {
-        if (game.turn() === 'w' && piece.search(/^b/) !== -1) return false; // Black pieces not movable by player
-        if (game.turn() === 'b' && piece.search(/^w/) !== -1) return false; // White pieces not movable by player (AI's turn)
-      } else if (gameMode === 'human_vs_human') {
-        // No restriction, all pieces movable on correct turn
-        if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
-            (game.turn() === 'b' && piece.search(/^w/) !== -1)) return false;
-      }
+      if ((game.turn() === 'w' && piece.startsWith('b')) ||
+          (game.turn() === 'b' && piece.startsWith('w'))) return false;
     }
 
-    // Attempt to make a move when a piece is dropped
     function onDrop(source, target) {
       const move = game.move({
         from: source,
         to: target,
-        promotion: 'q' // auto promote to queen for simplicity
+        promotion: 'q' // always promote to queen
       });
 
       if (move === null) return 'snapback';
 
       updateStatus();
       updateHistory();
-
-      if (gameMode === 'human_vs_ai' && !game.game_over() && game.turn() === 'b') {
-        engineMove();
-      }
     }
 
     function onSnapEnd() {
       board.position(game.fen());
     }
 
-    // Update status text
     function updateStatus() {
       if (game.in_checkmate()) {
         statusEl.textContent = `Checkmate! ${game.turn() === 'w' ? 'Black' : 'White'} wins.`;
@@ -191,37 +136,25 @@
       }
     }
 
-    // Update move history
     function updateHistory() {
       const history = game.history({ verbose: true });
       let html = '';
       for (let i = 0; i < history.length; i += 2) {
         const whiteMove = history[i] ? history[i].san : '';
-        const blackMove = history[i+1] ? history[i+1].san : '';
+        const blackMove = history[i + 1] ? history[i + 1].san : '';
         html += `<div>${Math.floor(i / 2) + 1}. ${whiteMove} ${blackMove}</div>`;
       }
       historyEl.innerHTML = html;
       historyEl.scrollTop = historyEl.scrollHeight;
     }
 
-    // Undo last move (or last two moves if vs AI)
     undoBtn.addEventListener('click', () => {
-      if (game.history().length === 0) return;
-
-      if (gameMode === 'human_vs_ai') {
-        // Undo last two moves (player + AI)
-        game.undo();
-        game.undo();
-      } else {
-        // Undo last one move in human vs human mode
-        game.undo();
-      }
+      game.undo();
       board.position(game.fen());
       updateStatus();
       updateHistory();
     });
 
-    // Reset game
     resetBtn.addEventListener('click', () => {
       game.reset();
       board.start();
@@ -229,46 +162,10 @@
       updateHistory();
     });
 
-    // Mode switcher
-    modeRadios.forEach(radio => {
-      radio.addEventListener('change', () => {
-        gameMode = radio.value;
-        resetBtn.click();
-      });
-    });
-
-    // Load Stockfish engine and communicate with it
-    async function initStockfish() {
-      stockfish = await loadStockfish();
-      stockfish.onmessage = function(event) {
-        const line = event.data ? event.data : event;
-        if (line === 'uciok') {
-          engineReady = true;
-        } else if (line.startsWith('bestmove')) {
-          engineThinking = false;
-          const move = line.split(' ')[1];
-          game.move({ from: move.substring(0,2), to: move.substring(2,4), promotion: move.length > 4 ? move[4] : 'q' });
-          board.position(game.fen());
-          updateStatus();
-          updateHistory();
-        }
-      };
-      stockfish.postMessage('uci');
-    }
-
-    // Ask Stockfish to make a move
-    function engineMove() {
-      if (!engineReady || engineThinking || game.game_over()) return;
-      engineThinking = true;
-      stockfish.postMessage('position fen ' + game.fen());
-      stockfish.postMessage('go depth 15');
-    }
-
-    // Start
     initBoard();
     updateStatus();
     updateHistory();
-    initStockfish();
   </script>
+
 </body>
 </html>
