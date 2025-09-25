@@ -12,9 +12,10 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      height: 100vh;
+      justify-content: flex-start;
+      min-height: 100vh;
       margin: 0;
+      padding: 20px;
     }
 
     h1 {
@@ -54,12 +55,21 @@
     }
 
     .scoreboard {
-      margin-top: 15px;
+      margin-top: 10px;
       font-size: 1.2rem;
     }
 
+    input#username {
+      margin-top: 15px;
+      padding: 8px;
+      font-size: 1rem;
+      border-radius: 4px;
+      border: none;
+      text-align: center;
+    }
+
     button {
-      margin-top: 20px;
+      margin-top: 15px;
       padding: 10px 20px;
       font-size: 1rem;
       background: #27ae60;
@@ -72,30 +82,55 @@
     button:hover {
       background: #1e8449;
     }
+
+    .leaderboard {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .leaderboard h2 {
+      margin-bottom: 10px;
+    }
+
+    .leaderboard ol {
+      padding-left: 20px;
+      text-align: left;
+      max-width: 200px;
+      margin: 0 auto;
+    }
   </style>
 </head>
 <body>
 
   <h1>Whack-a-Mole!</h1>
+  
+  <input type="text" id="username" placeholder="Enter your name (optional)" maxlength="12" />
+  
   <div class="scoreboard">
     Score: <span id="score">0</span> | Time left: <span id="time">30</span>s
   </div>
-  <div class="game" id="game">
-    <!-- Holes with moles -->
-  </div>
+  
+  <div class="game" id="game"></div>
+
   <button id="startBtn">Start Game</button>
+  <button id="resetBtn">Reset Leaderboard</button>
+
+  <div class="leaderboard" id="leaderboard">
+    <h2>🏆 Leaderboard</h2>
+    <ol id="leaderboardList"></ol>
+  </div>
 
   <script>
     const game = document.getElementById('game');
     const scoreDisplay = document.getElementById('score');
     const timeDisplay = document.getElementById('time');
     const startBtn = document.getElementById('startBtn');
+    const resetBtn = document.getElementById('resetBtn');
 
     const NUM_HOLES = 6;
     let score = 0;
     let timeLeft = 30;
     let lastHole = null;
-    let gameInterval = null;
     let moleTimeout = null;
     let gameTimer = null;
     let isGameRunning = false;
@@ -145,7 +180,12 @@
     function startGame() {
       if (isGameRunning) return;
 
+      const usernameInput = document.getElementById('username').value.trim();
+      const username = usernameInput || "Anonymous";
+
       isGameRunning = true;
+      startBtn.disabled = true;
+      resetBtn.disabled = true;
       score = 0;
       timeLeft = 30;
       scoreDisplay.textContent = score;
@@ -159,7 +199,7 @@
         timeLeft--;
         timeDisplay.textContent = timeLeft;
         if (timeLeft <= 0) {
-          endGame();
+          endGame(username);
         }
       }, 1000);
     }
@@ -175,17 +215,50 @@
       });
     }
 
-    function endGame() {
+    function endGame(username) {
       isGameRunning = false;
       clearInterval(gameTimer);
       clearTimeout(moleTimeout);
+      startBtn.disabled = false;
+      resetBtn.disabled = false;
       document.querySelectorAll('.hole').forEach(hole => hole.classList.remove('up'));
-      alert(`Game Over! 🎯 Your score: ${score}`);
+
+      saveScore(username, score);
+      alert(`Game Over, ${username}! 🎯 Your score: ${score}`);
+      renderLeaderboard();
     }
+
+    function saveScore(username, score) {
+      const leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+      leaderboard.push({ username, score });
+      leaderboard.sort((a, b) => b.score - a.score);
+      if (leaderboard.length > 5) leaderboard.length = 5; // keep top 5
+      localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+    }
+
+    function renderLeaderboard() {
+      const leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+      const list = document.getElementById('leaderboardList');
+      list.innerHTML = '';
+      leaderboard.forEach(entry => {
+        const li = document.createElement('li');
+        li.textContent = `${entry.username} — ${entry.score}`;
+        list.appendChild(li);
+      });
+    }
+
+    resetBtn.addEventListener('click', () => {
+      if (confirm("Are you sure you want to reset the leaderboard?")) {
+        localStorage.removeItem('leaderboard');
+        renderLeaderboard();
+      }
+    });
 
     startBtn.addEventListener('click', startGame);
 
-    createHoles(); // initial render
+    // Initial setup
+    createHoles();
+    renderLeaderboard();
   </script>
 
 </body>
