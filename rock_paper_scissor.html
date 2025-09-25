@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Rock-Paper-Scissors</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      text-align: center;
+      padding: 40px;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    button {
+      font-size: 18px;
+      padding: 15px 30px;
+      margin: 10px;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      background-color: #3498db;
+      color: white;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    #result {
+      margin-top: 30px;
+      font-size: 22px;
+      font-weight: bold;
+    }
+    #choices {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Rock-Paper-Scissors</h1>
+
+<div>
+  <button data-choice="rock">🪨 Rock</button>
+  <button data-choice="paper">📄 Paper</button>
+  <button data-choice="scissors">✂️ Scissors</button>
+</div>
+
+<div id="choices"></div>
+<div id="result"></div>
+
+<script>
+  const buttons = document.querySelectorAll('button[data-choice]');
+  const choicesDiv = document.getElementById('choices');
+  const resultDiv = document.getElementById('result');
+
+  const options = ['rock', 'paper', 'scissors'];
+
+  function getComputerChoice() {
+    const randomIndex = Math.floor(Math.random() * options.length);
+    return options[randomIndex];
+  }
+
+  function decideWinner(player, computer) {
+    if (player === computer) return 'It\'s a tie!';
+    if (
+      (player === 'rock' && computer === 'scissors') ||
+      (player === 'paper' && computer === 'rock') ||
+      (player === 'scissors' && computer === 'paper')
+    ) {
+      return 'You win! 🎉';
+    }
+    return 'You lose! 😞';
+  }
+
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      const playerChoice = button.dataset.choice;
+      const computerChoice = getComputerChoice();
+
+      choicesDiv.textContent = `You chose: ${playerChoice} | Computer chose: ${computerChoice}`;
+      resultDiv.textContent = decideWinner(playerChoice, computerChoice);
+    });
+  });
+</script>
+
+</body>
+</html>
