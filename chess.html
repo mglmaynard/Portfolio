@@ -4,7 +4,10 @@
   <meta charset="UTF-8" />
   <title>Chess - Local Multiplayer</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/dist/chessboard.min.css" />
+
+  <!-- Chessboard.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard.js/1.0.0/css/chessboard.min.css" />
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -14,14 +17,16 @@
       align-items: center;
       background: #f0f0f0;
     }
+
     #board {
       width: 400px;
     }
+
     #status {
       margin-top: 10px;
       font-size: 1.2rem;
-      min-height: 24px;
     }
+
     #history {
       margin-top: 10px;
       max-width: 400px;
@@ -32,6 +37,7 @@
       overflow-y: auto;
       font-family: monospace;
     }
+
     button {
       margin: 5px 10px 5px 0;
       padding: 10px 15px;
@@ -41,11 +47,12 @@
       border-radius: 5px;
       background-color: #3498db;
       color: white;
-      user-select: none;
     }
+
     button:hover {
       background-color: #2980b9;
     }
+
     #controls {
       margin-top: 10px;
       display: flex;
@@ -60,111 +67,91 @@
   <h1>Chess - Local Multiplayer</h1>
 
   <div id="board"></div>
-  <div id="status"></div>
+  <div id="status">Loading...</div>
 
   <div id="controls">
-    <button id="undoBtn" title="Undo last move">Undo</button>
-    <button id="resetBtn" title="Reset game">Reset</button>
+    <button id="undoBtn">Undo</button>
+    <button id="resetBtn">Reset</button>
   </div>
 
   <h3>Move History</h3>
   <div id="history"></div>
 
-  <!-- Chessboard.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/dist/chessboard.min.js"></script>
-  <!-- Chess.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chess.js@1.0.0/chess.min.js"></script>
+  <!-- JS Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/1.0.0/chess.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard.js/1.0.0/js/chessboard.min.js"></script>
 
   <script>
-    let board = null;
-    const game = new Chess();
-
-    const statusEl = document.getElementById('status');
-    const historyEl = document.getElementById('history');
-    const undoBtn = document.getElementById('undoBtn');
-    const resetBtn = document.getElementById('resetBtn');
-
-    // Initialize chessboard.js
-    function initBoard() {
-      if (board) board.destroy();
-
-      board = Chessboard('board', {
+    document.addEventListener('DOMContentLoaded', () => {
+      const game = new Chess();
+      const board = Chessboard('board', {
         draggable: true,
         position: 'start',
-        onDragStart: onDragStart,
-        onDrop: onDrop,
-        onSnapEnd: onSnapEnd,
-        pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png'
-      });
-    }
-
-    // Prevent moving pieces out of turn
-    function onDragStart(source, piece) {
-      if (game.game_over()) return false;
-      if ((game.turn() === 'w' && piece.startsWith('b')) ||
-          (game.turn() === 'b' && piece.startsWith('w'))) return false;
-    }
-
-    function onDrop(source, target) {
-      const move = game.move({
-        from: source,
-        to: target,
-        promotion: 'q' // always promote to queen
+        pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
+        onDragStart: (source, piece) => {
+          if (game.game_over()) return false;
+          if ((game.turn() === 'w' && piece.startsWith('b')) ||
+              (game.turn() === 'b' && piece.startsWith('w'))) return false;
+        },
+        onDrop: (source, target) => {
+          const move = game.move({ from: source, to: target, promotion: 'q' });
+          if (move === null) return 'snapback';
+          updateStatus();
+          updateHistory();
+        },
+        onSnapEnd: () => {
+          board.position(game.fen());
+        }
       });
 
-      if (move === null) return 'snapback';
+      const statusEl = document.getElementById('status');
+      const historyEl = document.getElementById('history');
+      const undoBtn = document.getElementById('undoBtn');
+      const resetBtn = document.getElementById('resetBtn');
 
-      updateStatus();
-      updateHistory();
-    }
-
-    function onSnapEnd() {
-      board.position(game.fen());
-    }
-
-    function updateStatus() {
-      if (game.in_checkmate()) {
-        statusEl.textContent = `Checkmate! ${game.turn() === 'w' ? 'Black' : 'White'} wins.`;
-      } else if (game.in_stalemate()) {
-        statusEl.textContent = "Draw by stalemate.";
-      } else if (game.in_draw()) {
-        statusEl.textContent = "Draw.";
-      } else if (game.in_check()) {
-        statusEl.textContent = `${game.turn() === 'w' ? 'White' : 'Black'} to move (in check)`;
-      } else {
-        statusEl.textContent = `${game.turn() === 'w' ? 'White' : 'Black'} to move`;
+      function updateStatus() {
+        if (game.in_checkmate()) {
+          statusEl.textContent = `Checkmate! ${game.turn() === 'w' ? 'Black' : 'White'} wins.`;
+        } else if (game.in_stalemate()) {
+          statusEl.textContent = "Draw by stalemate.";
+        } else if (game.in_draw()) {
+          statusEl.textContent = "Draw.";
+        } else if (game.in_check()) {
+          statusEl.textContent = `${game.turn() === 'w' ? 'White' : 'Black'} to move (in check)`;
+        } else {
+          statusEl.textContent = `${game.turn() === 'w' ? 'White' : 'Black'} to move`;
+        }
       }
-    }
 
-    function updateHistory() {
-      const history = game.history({ verbose: true });
-      let html = '';
-      for (let i = 0; i < history.length; i += 2) {
-        const whiteMove = history[i] ? history[i].san : '';
-        const blackMove = history[i + 1] ? history[i + 1].san : '';
-        html += `<div>${Math.floor(i / 2) + 1}. ${whiteMove} ${blackMove}</div>`;
+      function updateHistory() {
+        const history = game.history({ verbose: true });
+        let html = '';
+        for (let i = 0; i < history.length; i += 2) {
+          const whiteMove = history[i] ? history[i].san : '';
+          const blackMove = history[i + 1] ? history[i + 1].san : '';
+          html += `<div>${Math.floor(i / 2) + 1}. ${whiteMove} ${blackMove}</div>`;
+        }
+        historyEl.innerHTML = html;
+        historyEl.scrollTop = historyEl.scrollHeight;
       }
-      historyEl.innerHTML = html;
-      historyEl.scrollTop = historyEl.scrollHeight;
-    }
 
-    undoBtn.addEventListener('click', () => {
-      game.undo();
-      board.position(game.fen());
+      undoBtn.addEventListener('click', () => {
+        game.undo();
+        board.position(game.fen());
+        updateStatus();
+        updateHistory();
+      });
+
+      resetBtn.addEventListener('click', () => {
+        game.reset();
+        board.start();
+        updateStatus();
+        updateHistory();
+      });
+
       updateStatus();
       updateHistory();
     });
-
-    resetBtn.addEventListener('click', () => {
-      game.reset();
-      board.start();
-      updateStatus();
-      updateHistory();
-    });
-
-    initBoard();
-    updateStatus();
-    updateHistory();
   </script>
 
 </body>
