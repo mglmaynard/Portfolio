@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Maze Solver</title>
+<style>
+  body {
+    background: #111;
+    color: #eee;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  h1 {
+    margin-bottom: 10px;
+    color: #BFA66B;
+  }
+  #maze {
+    display: grid;
+    grid-template-columns: repeat(20, 25px);
+    grid-template-rows: repeat(20, 25px);
+    gap: 2px;
+    margin-top: 20px;
+  }
+  .cell {
+    width: 25px;
+    height: 25px;
+    background: #222;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  .wall {
+    background: #444;
+  }
+  .path {
+    background: #BFA66B;
+  }
+  .visited {
+    background: #666;
+  }
+  .start {
+    background: #4CAF50;
+  }
+  .end {
+    background: #E53935;
+  }
+  button {
+    margin-top: 15px;
+    background-color: #BFA66B;
+    color: #111;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background-color: #D4C48C;
+  }
+</style>
+</head>
+<body>
+
+<h1>Maze Solver</h1>
+<button id="generateBtn">Generate Maze</button>
+<button id="solveBtn" disabled>Solve Maze</button>
+
+<div id="maze" aria-label="Maze grid" role="grid"></div>
+
+<script>
+  const rows = 20;
+  const cols = 20;
+  const mazeContainer = document.getElementById('maze');
+  const generateBtn = document.getElementById('generateBtn');
+  const solveBtn = document.getElementById('solveBtn');
+
+  let maze = [];
+  let visited = [];
+
+  // Directions: up, right, down, left
+  const directions = [
+    [-1, 0],
+    [0, 1],
+    [1, 0],
+    [0, -1]
+  ];
+
+  // Initialize maze grid with walls
+  function initMaze() {
+    maze = Array(rows).fill(null).map(() => Array(cols).fill(1)); // 1 = wall, 0 = path
+    visited = Array(rows).fill(null).map(() => Array(cols).fill(false));
+  }
+
+  // Utility to shuffle array (for random DFS)
+  function shuffle(array) {
+    for (let i = array.length -1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
+
+  // Recursive backtracking maze generation
+  function carvePassagesFrom(row, col) {
+    visited[row][col] = true;
+    maze[row][col] = 0;
+
+    let dirs = [...directions];
+    shuffle(dirs);
+
+    for (const [dr, dc] of dirs) {
+      const newRow = row + dr * 2;
+      const newCol = col + dc * 2;
+
+      if (
+        newRow >= 0 && newRow < rows &&
+        newCol >= 0 && newCol < cols &&
+        !visited[newRow][newCol]
+      ) {
+        // Carve path between cells
+        maze[row + dr][col + dc] = 0;
+        carvePassagesFrom(newRow, newCol);
+      }
+    }
+  }
+
+  // Render maze in the DOM
+  function renderMaze() {
+    mazeContainer.innerHTML = '';
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const cell = document.createElement('div');
+        cell.classList.add('cell');
+        cell.setAttribute('role', 'gridcell');
+        cell.dataset.row = r;
+        cell.dataset.col = c;
+
+        if (maze[r][c] === 1) {
+          cell.classList.add('wall');
+        }
+
+        mazeContainer.appendChild(cell);
+      }
+    }
+
+    // Mark start and end
+    getCell(0, 0).classList.add('start');
+    getCell(rows - 1, cols - 1).classList.add('end');
+  }
+
+  // Get cell element at row, col
+  function getCell(row, col) {
+    return mazeContainer.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
+  }
+
+  // Maze solving (DFS) with visualization
+  async function solveMaze() {
+    solveBtn.disabled = true;
+    generateBtn.disabled = true;
+    visited = Array(rows).fill(null).map(() => Array(cols).fill(false));
+
+    const path = [];
+    const found = await dfs(0, 0, path);
+
+    if (found) {
+      for (const [r, c] of path) {
+        if ((r === 0 && c === 0) || (r === rows - 1 && c === cols - 1)) continue;
+        getCell(r, c).classList.add('path');
+        await sleep(50);
+      }
+    } else {
+      alert('No path found!');
+    }
+    solveBtn.disabled = false;
+    generateBtn.disabled = false;
+  }
+
+  async function dfs(r, c, path) {
+    if (r < 0 || r >= rows || c < 0 || c >= cols) return false;
+    if (maze[r][c] === 1 || visited[r][c]) return false;
+
+    visited[r][c] = true;
+    path.push([r, c]);
+    getCell(r, c).classList.add('visited');
+    await sleep(20);
+
+    if (r === rows - 1 && c === cols - 1) {
+      return true;
+    }
+
+    for (const [dr, dc] of directions) {
+      if (await dfs(r + dr, c + dc, path)) {
+        return true;
+      }
+    }
+
+    path.pop();
+    return false;
+  }
+
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  function setup() {
+    initMaze();
+    carvePassagesFrom(0, 0);
+    renderMaze();
+    solveBtn.disabled = false;
+  }
+
+  generateBtn.addEventListener('click', () => {
+    setup();
+  });
+
+  solveBtn.addEventListener('click', () => {
+    solveMaze();
+  });
+
+  // Initial setup
+  setup();
+
+</script>
+
+</body>
+</html>
