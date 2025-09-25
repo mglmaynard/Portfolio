@@ -46,7 +46,7 @@
 
     figure {
       text-align: center;
-      margin-bottom: 50px;
+      margin-bottom: 20px;
     }
 
     figcaption {
@@ -141,16 +141,33 @@
     <img src="charts_Random_forest/1_Random_Seed.png" alt="Random Forest Classifier initialization with fixed random seed">
     <figcaption>1.1. Random Forest Classifier</figcaption>
   </figure>
+  <p>
+    The Random Forest classifier was initialized with a fixed random seed for reproducibility. 
+    This ensures that the same set of trees is generated each time the model is run, 
+    which is essential when comparing results or sharing the analysis.
+  </p>
 
   <figure class="chart-section">
     <img src="charts_Random_forest/2_Visual_of_seeds.png" alt="Visualization of one decision tree from the Random Forest">
     <figcaption>1.2. Decision Tree</figcaption>
   </figure>
+  <p>
+    Although Random Forest builds many trees, the figure above shows a single decision tree as an example. 
+    Each split is based on a student feature such as grades, study time, or absences. 
+    The tree helps illustrate how the model makes pass/fail decisions, though in practice 
+    Random Forest relies on the aggregated predictions of hundreds of such trees for stability and accuracy.
+  </p>
 
   <figure class="chart-section">
     <img src="charts_Random_forest/3_Classification_Report.png" alt="Classification report showing precision, recall, f1-score, and accuracy">
     <figcaption>1.3. Classification Report</figcaption>
   </figure>
+  <p>
+    The classification report indicates an overall accuracy of <strong>87%</strong>. 
+    The precision, recall, and F1-scores are strong for both the "pass" (1) and "fail" (0) categories, 
+    with the model performing slightly better at identifying students who will pass. 
+    This demonstrates the effectiveness of Random Forest in handling imbalanced student outcomes.
+  </p>
 
   <h2 id="evaluation">Model Evaluation</h2>
 
@@ -158,11 +175,23 @@
     <img src="charts_Random_forest/4_random_results.png" alt="Confusion matrix for Random Forest model predictions">
     <figcaption>1.4. Confusion Matrix</figcaption>
   </figure>
+  <p>
+    The confusion matrix further confirms the classification performance. Out of 79 students, 
+    the model correctly predicted <strong>23 out of 26 fails</strong> and <strong>46 out of 53 passes</strong>. 
+    Only a small number of students were misclassified, which is acceptable in most educational prediction contexts.
+  </p>
 
   <figure class="chart-section">
     <img src="charts_Random_forest/5_feauture_importance.png" alt="Feature importance scores from the Random Forest model">
     <figcaption>1.5. Random Forest Feature Importance</figcaption>
   </figure>
+  <p>
+    Feature importance analysis reveals that the strongest predictors of academic success 
+    are the students’ previous grades (<strong>G1</strong> and <strong>G2</strong>). 
+    Other influential variables include absences and number of past failures. 
+    Social and demographic features such as school support or family support had less predictive power. 
+    This suggests that academic history outweighs external factors when predicting performance outcomes.
+  </p>
 
   <h2 id="conclusion">Conclusion</h2>
   <p>
