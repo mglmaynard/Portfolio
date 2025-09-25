@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Simple Word Guessing Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #222;
+      color: #eee;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    h1 {
+      color: #BFA66B;
+      margin-bottom: 20px;
+    }
+    .word {
+      font-size: 2rem;
+      letter-spacing: 10px;
+      margin-bottom: 20px;
+    }
+    .message {
+      margin: 15px 0;
+      font-size: 1.2rem;
+      min-height: 24px;
+    }
+    input[type="text"] {
+      font-size: 1.2rem;
+      padding: 6px 10px;
+      width: 60px;
+      text-transform: uppercase;
+      text-align: center;
+      margin-right: 10px;
+    }
+    button {
+      font-size: 1.2rem;
+      padding: 6px 12px;
+      cursor: pointer;
+      background-color: #BFA66B;
+      border: none;
+      border-radius: 4px;
+      color: #222;
+      font-weight: bold;
+    }
+    .guessed-letters {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Word Guessing Game</h1>
+  <div class="word" id="wordDisplay">_ _ _ _ _</div>
+
+  <div>
+    <input type="text" id="letterInput" maxlength="1" aria-label="Enter a letter to guess" />
+    <button id="guessBtn">Guess</button>
+  </div>
+
+  <div class="message" id="message"></div>
+  <div>Remaining guesses: <span id="remaining">6</span></div>
+
+  <div class="guessed-letters" id="guessedLetters"></div>
+
+  <script>
+    const words = ["JAVASCRIPT", "CODING", "PORTFOLIO", "DEVELOPER", "ANALYTICS"];
+    let selectedWord = words[Math.floor(Math.random() * words.length)];
+    let guessedLetters = new Set();
+    let remainingGuesses = 6;
+
+    const wordDisplay = document.getElementById('wordDisplay');
+    const letterInput = document.getElementById('letterInput');
+    const guessBtn = document.getElementById('guessBtn');
+    const message = document.getElementById('message');
+    const remaining = document.getElementById('remaining');
+    const guessedLettersDiv = document.getElementById('guessedLetters');
+
+    function updateWordDisplay() {
+      let display = "";
+      for (let letter of selectedWord) {
+        display += guessedLetters.has(letter) ? letter + " " : "_ ";
+      }
+      wordDisplay.textContent = display.trim();
+    }
+
+    function checkWin() {
+      for (let letter of selectedWord) {
+        if (!guessedLetters.has(letter)) return false;
+      }
+      return true;
+    }
+
+    guessBtn.addEventListener('click', () => {
+      let guess = letterInput.value.toUpperCase();
+      message.textContent = "";
+      if (!guess.match(/[A-Z]/) || guess.length !== 1) {
+        message.textContent = "Please enter a valid letter.";
+        letterInput.value = "";
+        letterInput.focus();
+        return;
+      }
+      if (guessedLetters.has(guess)) {
+        message.textContent = `You already guessed "${guess}". Try another letter.`;
+        letterInput.value = "";
+        letterInput.focus();
+        return;
+      }
+
+      guessedLetters.add(guess);
+      guessedLettersDiv.textContent = "Guessed letters: " + Array.from(guessedLetters).join(", ");
+
+      if (!selectedWord.includes(guess)) {
+        remainingGuesses--;
+        remaining.textContent = remainingGuesses;
+        message.textContent = `"${guess}" is not in the word.`;
+      } else {
+        message.textContent = `Good job! "${guess}" is in the word.`;
+      }
+
+      updateWordDisplay();
+
+      if (checkWin()) {
+        message.textContent = "🎉 Congratulations! You guessed the word!";
+        guessBtn.disabled = true;
+        letterInput.disabled = true;
+      } else if (remainingGuesses <= 0) {
+        message.textContent = `Game over! The word was "${selectedWord}".`;
+        guessBtn.disabled = true;
+        letterInput.disabled = true;
+        updateWordDisplay(); // reveal word
+      }
+
+      letterInput.value = "";
+      letterInput.focus();
+    });
+
+    // Initialize
+    updateWordDisplay();
+    letterInput.focus();
+  </script>
+
+</body>
+</html>
