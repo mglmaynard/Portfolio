@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Trivia Quiz</title>
+<style>
+  body {
+    background-color: #000;
+    color: #eee;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    min-height: 100vh;
+    margin: 0;
+  }
+  h1 {
+    color: #BFA66B;
+    margin-bottom: 10px;
+  }
+  #quiz-container {
+    background-color: #222;
+    border-radius: 10px;
+    padding: 20px 30px;
+    max-width: 600px;
+    width: 100%;
+    box-shadow: 0 0 15px #BFA66B;
+  }
+  .question {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+  }
+  .answers {
+    list-style: none;
+    padding: 0;
+  }
+  .answers li {
+    background-color: #333;
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .answers li:hover {
+    background-color: #BFA66B;
+    color: #111;
+  }
+  .answers li.selected {
+    background-color: #BFA66B;
+    color: #111;
+  }
+  #submit-btn {
+    margin-top: 20px;
+    background-color: #BFA66B;
+    border: none;
+    padding: 12px 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #111;
+    transition: background-color 0.3s ease;
+  }
+  #submit-btn:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+    color: #999;
+  }
+  #result {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    color: #BFA66B;
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+
+<h1>Trivia Quiz</h1>
+
+<div id="quiz-container" aria-live="polite">
+  <div class="question" id="question">Loading question...</div>
+  <ul class="answers" id="answers"></ul>
+  <button id="submit-btn" disabled>Submit Answer</button>
+  <div id="result" role="alert" aria-live="assertive"></div>
+</div>
+
+<script>
+  const questions = [
+    {
+      question: "Which planet is known as the Red Planet?",
+      answers: ["Earth", "Mars", "Jupiter", "Venus"],
+      correct: 1
+    },
+    {
+      question: "What is the capital city of Japan?",
+      answers: ["Seoul", "Tokyo", "Bangkok", "Shanghai"],
+      correct: 1
+    },
+    {
+      question: "Who wrote the novel '1984'?",
+      answers: ["George Orwell", "Aldous Huxley", "J.K. Rowling", "Mark Twain"],
+      correct: 0
+    },
+    {
+      question: "What is the chemical symbol for Gold?",
+      answers: ["Au", "Ag", "Pb", "Fe"],
+      correct: 0
+    },
+    {
+      question: "Which language is primarily used for web development?",
+      answers: ["Python", "Java", "JavaScript", "C#"],
+      correct: 2
+    }
+  ];
+
+  let currentQuestionIndex = 0;
+  let selectedAnswerIndex = null;
+  let score = 0;
+
+  const questionEl = document.getElementById('question');
+  const answersEl = document.getElementById('answers');
+  const submitBtn = document.getElementById('submit-btn');
+  const resultEl = document.getElementById('result');
+
+  function loadQuestion() {
+    selectedAnswerIndex = null;
+    submitBtn.disabled = true;
+    resultEl.textContent = '';
+
+    const currentQuestion = questions[currentQuestionIndex];
+    questionEl.textContent = currentQuestion.question;
+
+    answersEl.innerHTML = '';
+    currentQuestion.answers.forEach((answer, index) => {
+      const li = document.createElement('li');
+      li.textContent = answer;
+      li.tabIndex = 0;
+      li.setAttribute('role', 'button');
+      li.setAttribute('aria-pressed', 'false');
+
+      li.addEventListener('click', () => selectAnswer(index));
+      li.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          selectAnswer(index);
+        }
+      });
+
+      answersEl.appendChild(li);
+    });
+  }
+
+  function selectAnswer(index) {
+    selectedAnswerIndex = index;
+    submitBtn.disabled = false;
+
+    // Update selected styles and ARIA attributes
+    Array.from(answersEl.children).forEach((li, i) => {
+      if (i === index) {
+        li.classList.add('selected');
+        li.setAttribute('aria-pressed', 'true');
+      } else {
+        li.classList.remove('selected');
+        li.setAttribute('aria-pressed', 'false');
+      }
+    });
+  }
+
+  function submitAnswer() {
+    if (selectedAnswerIndex === null) return;
+
+    const currentQuestion = questions[currentQuestionIndex];
+    if (selectedAnswerIndex === currentQuestion.correct) {
+      score++;
+      resultEl.textContent = 'Correct!';
+      resultEl.style.color = '#4CAF50';
+    } else {
+      resultEl.textContent = `Wrong! The correct answer was: "${currentQuestion.answers[currentQuestion.correct]}"`;
+      resultEl.style.color = '#E53935';
+    }
+
+    submitBtn.disabled = true;
+
+    // Move to next question after delay
+    setTimeout(() => {
+      currentQuestionIndex++;
+      if (currentQuestionIndex >= questions.length) {
+        showFinalScore();
+      } else {
+        loadQuestion();
+      }
+    }, 2000);
+  }
+
+  function showFinalScore() {
+    questionEl.textContent = `Quiz Completed! Your score: ${score} / ${questions.length}`;
+    answersEl.innerHTML = '';
+    submitBtn.style.display = 'none';
+    resultEl.textContent = '';
+  }
+
+  submitBtn.addEventListener('click', submitAnswer);
+
+  // Initial load
+  loadQuestion();
+</script>
+
+</body>
+</html>
