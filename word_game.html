@@ -28,6 +28,11 @@
       font-size: 1.2rem;
       min-height: 24px;
     }
+    .clue {
+      font-style: italic;
+      color: #BFA66B;
+      margin-bottom: 20px;
+    }
     input[type="text"] {
       font-size: 1.2rem;
       padding: 6px 10px;
@@ -54,6 +59,7 @@
 <body>
 
   <h1>Word Guessing Game</h1>
+  <div class="clue" id="clueDisplay">Clue: </div>
   <div class="word" id="wordDisplay">_ _ _ _ _</div>
 
   <div>
@@ -67,17 +73,33 @@
   <div class="guessed-letters" id="guessedLetters"></div>
 
   <script>
-    const words = ["JAVASCRIPT", "CODING", "PORTFOLIO", "DEVELOPER", "ANALYTICS"];
-    let selectedWord = words[Math.floor(Math.random() * words.length)];
+    // Array of words with clues
+    const wordList = [
+      { word: "JAVASCRIPT", clue: "A popular programming language for the web." },
+      { word: "CODING", clue: "What programmers do to create software." },
+      { word: "PORTFOLIO", clue: "A collection showcasing your work or projects." },
+      { word: "DEVELOPER", clue: "Someone who writes software." },
+      { word: "ANALYTICS", clue: "The science of analyzing data to gain insights." }
+    ];
+
+    // Select random word with clue
+    const selected = wordList[Math.floor(Math.random() * wordList.length)];
+    const selectedWord = selected.word;
+    const clue = selected.clue;
+
     let guessedLetters = new Set();
     let remainingGuesses = 6;
 
     const wordDisplay = document.getElementById('wordDisplay');
+    const clueDisplay = document.getElementById('clueDisplay');
     const letterInput = document.getElementById('letterInput');
     const guessBtn = document.getElementById('guessBtn');
     const message = document.getElementById('message');
     const remaining = document.getElementById('remaining');
     const guessedLettersDiv = document.getElementById('guessedLetters');
+
+    // Show clue
+    clueDisplay.textContent = "Clue: " + clue;
 
     function updateWordDisplay() {
       let display = "";
